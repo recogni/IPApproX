@@ -547,6 +547,7 @@ class IPDatabase(object):
                 else:
                     ip['remote'] = "%s:%s" % (server, group)
 
+                print("%s clone %s/%s.git %s" % (git, ip['remote'], ip['name'], ip['path']))
                 ret = execute("%s clone %s/%s.git %s" % (git, ip['remote'], ip['name'], ip['path']))
                 if ret != 0:
                     print(tcolors.ERROR + "ERROR: could not clone, you probably have to remove the '%s' directory." % ip['name'] + tcolors.ENDC)
