@@ -68,6 +68,7 @@ ALLOWED_TARGETS = [
     'umc65',
     'tsmc55',
     'tsmc40',
+    'tsmc7',
     'gf28',
     'gf22',
     'smic130',
