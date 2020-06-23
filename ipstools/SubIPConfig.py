@@ -125,7 +125,7 @@ class SubIPConfig(object):
         self.sim_tools = self.__get_sim_tools() # eda tools supported (for RTL encrypted models)
         self.synth_tools = self.__get_synth_tools() # eda tools supported (for RTL encrypted models)
 
-    def export_make(self, abs_path, more_opts, target_tech=None, local=False, simulator='vsim'):
+    def export_make(self, abs_path, more_opts, target_tech=None, local=False, simulator='vsim', library_name='ncsim_libs'):
         if simulator is "vsim":
             mk_subiprule = MK_SUBIPRULE
             mk_buildcmd_svlog = MK_BUILDCMD_SVLOG
@@ -185,7 +185,7 @@ class SubIPConfig(object):
                 defines = ""
             for d in self.defines:
                 defines = "%s +define+%s" % (defines, d)
-            vlog_rule += mk_buildcmd_svlog % ("%s %s %s" % (more_opts, vlog_opts, defines), self.sub_ip_name.upper(), self.sub_ip_name.upper())
+            vlog_rule += mk_buildcmd_svlog % (library_name, "%s %s %s" % (more_opts, vlog_opts, defines), self.sub_ip_name.upper(), self.sub_ip_name.upper())
             vlog_rule += "\n\t"
         if len(vhdl_files) > 0:
             vlog_rule += mk_buildcmd_vhdl % ("%s %s" % (more_opts, vcom_opts), self.sub_ip_name.upper())

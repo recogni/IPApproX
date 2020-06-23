@@ -821,7 +821,7 @@ the '%s' directory.""" % ip['name'] + tcolors.ENDC)
 
         store_ips_list(new_ips_list, new_ips)
 
-    def export_make(self, abs_path="$(IP_PATH)", script_path="./", more_opts="", source='ips', target_tech=None, local=False, simulator='vsim'):
+    def export_make(self, abs_path="$(IP_PATH)", script_path="./", more_opts="", source='ips', target_tech=None, local=False, simulator='vsim', library_name="ncsim_libs"):
         """Exports Makefiles and scripts to build the simulation platform.                    
                  
             :param abs_path:              The path to be used in Makefiles to find the IPs
@@ -841,6 +841,9 @@ the '%s' directory.""" % ip['name'] + tcolors.ENDC)
 
             :param simulator:             'vsim' or 'ncsim'
             :type  simulator: str 
+        
+            :param library_name:          ncsim library name
+            :type  library_name: str 
 
         This function exports Makefiles and scripts to build the simulation platform to be used with Mentor ModelSim/QuestaSim or Cadence NCSim.
         """
@@ -853,7 +856,7 @@ the '%s' directory.""" % ip['name'] + tcolors.ENDC)
             ip_dic = self.rtl_dic
         for i in ip_dic.keys():
             filename = "%s/%s.mk" % (script_path, i)
-            makefile = ip_dic[i].export_make(abs_path, more_opts, target_tech=target_tech, source=source, local=local, simulator=simulator)
+            makefile = ip_dic[i].export_make(abs_path, more_opts, target_tech=target_tech, source=source, local=local, simulator=simulator, library_name=library_name)
             with open(filename, "w") as f:
                 f.write(makefile)
 

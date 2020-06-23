@@ -43,7 +43,7 @@ class IPConfig(object):
         except AttributeError:
             self.sub_ips = OrderedDict()
 
-    def export_make(self, abs_path, more_opts, target_tech=None, source='ips', local=False, simulator='vsim'):
+    def export_make(self, abs_path, more_opts, target_tech=None, source='ips', local=False, simulator='vsim', library_name="ncsim_libs"):
         if simulator is "vsim":
             mk_preamble = MK_PREAMBLE
             vmake = "vmake"
@@ -70,7 +70,7 @@ class IPConfig(object):
             makefile = mk_preamble % (prepare(self.ip_name), ip_path_env, self.ip_path, phony, commands) 
         makefile += MK_POSTAMBLE
         for s in self.sub_ips.keys():
-            makefile += self.sub_ips[s].export_make(abs_path, more_opts, target_tech=target_tech, local=local, simulator=simulator)
+            makefile += self.sub_ips[s].export_make(abs_path, more_opts, target_tech=target_tech, local=local, simulator=simulator, library_name=library_name)
         return makefile
 
     def export_vsim(self, abs_path, more_opts, target_tech='st28fdsoi', local=False):
