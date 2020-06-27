@@ -31,15 +31,16 @@ include ncompile/build.mk
 ncompile-$(IP): $(LIB_PATH)/_nmake
 
 $(LIB_PATH)/_nmake : %s
-	echo $(LIB_PATH)/_nmake
+	@echo $(LIB_PATH)
 """
 
 MKN_SUBIPRULE = """ncompile-subip-%s: $(LIB_PATH)/%s.nmake
 
 $(LIB_PATH)/%s.nmake: $(SRC_SVLOG_%s) $(SRC_VHDL_%s)
+	mkdir -p $(LIB_PATH)
 	$(call subip_echo,%s)
 	%s
-	echo $(LIB_PATH)/%s.nmake
+	touch $(LIB_PATH)/%s.nmake
 """
 
 MKN_BUILDCMD_SVLOG = "$(SVLOG_CC) -makelib %s %s $(INCDIR_%s) $(SRC_SVLOG_%s) -endlib"
