@@ -81,6 +81,7 @@ ALLOWED_FLAGS = [
     'skip_synthesis',
     'skip_verilator',
     'skip_tcsh',
+    'skip_lint',
     'only_local'
 ]
 
@@ -247,8 +248,8 @@ class SubIPConfig(object):
             return "\n"
         if "skip_synthesis" in self.flags:
             return "\n"
-        if not ("all" in self.synth_tools or "dc" in self.synth_tools):            
-            return "\n"            
+        if not ("all" in self.synth_tools or "dc" in self.synth_tools):
+            return "\n"
         analyze_cmd = SYNOPSYS_ANALYZE_PREAMBLE_SUBIP % (self.sub_ip_name)
         defines = ""
         for d in self.defines:
@@ -270,7 +271,7 @@ class SubIPConfig(object):
             return "\n"
         if "skip_synthesis" in self.flags:
             return "\n"
-        if not ("all" in self.synth_tools or "genus" in self.synth_tools):            
+        if not ("all" in self.synth_tools or "genus" in self.synth_tools):
             return "\n"
         analyze_cmd = CADENCE_ANALYZE_PREAMBLE_SUBIP % (self.sub_ip_name)
         defines = ""
@@ -301,6 +302,24 @@ class SubIPConfig(object):
             ncsim_files += "%s/%s/%s\n" % (abs_path, self.ip_path, f)
 
         return ncsim_files
+
+    def export_lint(self, abs_path):
+            if not ("all" in self.targets or "rtl" in self.targets):
+            return ""
+        if "only_local" in self.flags:
+            return ""
+        if "skip_lint" in self.flags:
+            return ""
+        lint_files = ""
+        if len(self.incdirs) > 0:
+            for i in self.incdirs:
+                lint_files +="-incdir "
+                lint_files += "%s/%s/%s\n" % (abs_path, self.ip_path, i)
+        files = self.files
+        for f in files:
+            lint_files += "%s/%s/%s\n" % (abs_path, self.ip_path, f)
+        return lint_files
+
     def export_verilator(self, abs_path):
         if 'all' not in self.targets and 'verilator' not in self.targets:
             return "\n"
