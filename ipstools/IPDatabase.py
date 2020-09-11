@@ -1072,7 +1072,7 @@ the '%s' directory.""" % ip['name'] + tcolors.ENDC)
             f.write(ncsim_script)
 
     def generate_lint_command_list(self, script_path="./src_files.f", root='.', source='ips', domain=None, alternatives=[]):
-            """Exports command script to be used for compilation and elaboration in ncsim or Xcelium.
+        """Exports command script to be used for compilation and elaboration in ncsim or Xcelium.
 
             :param script_path:           The path where the command file is placed relative to the root variable
             :type  script_path: str
