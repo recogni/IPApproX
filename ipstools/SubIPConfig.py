@@ -304,7 +304,7 @@ class SubIPConfig(object):
         return ncsim_files
 
     def export_lint(self, abs_path):
-            if not ("all" in self.targets or "rtl" in self.targets):
+        if not ("all" in self.targets or "rtl" in self.targets):
             return ""
         if "only_local" in self.flags:
             return ""
