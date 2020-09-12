@@ -822,7 +822,7 @@ the '%s' directory.""" % ip['name'] + tcolors.ENDC)
         store_ips_list(new_ips_list, new_ips)
 
     def export_make(self, abs_path="$(IP_PATH)", script_path="./", more_opts="", source='ips', target_tech=None, local=False, simulator='vsim', library_name="ncsim_libs"):
-                """Exports Makefiles and scripts to build the simulation platform.                    
+        """Exports Makefiles and scripts to build the simulation platform.
 
             :param abs_path:              The path to be used in Makefiles to find the IPs
             :type  abs_path: str
