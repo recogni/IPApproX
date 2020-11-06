@@ -499,6 +499,14 @@ class IPDatabase(object):
             if ip['path'][:20] == "$SITE_DEPENDENT_PATH":
                 continue
 
+            # compose remote name
+            server = ip['server'] if ip['server'] is not None else self.default_server
+            group  = ip['group']  if ip['group']  is not None else self.default_group
+            if server[:5] == "https" or server[:6] == "git://":
+                ip['remote'] = "%s/%s" % (server, group)
+            else:
+                ip['remote'] = "%s:%s" % (server, group)
+
             os.chdir(cwd)
             # check if directory already exists, this hints to the fact that we probably already cloned it
             if os.path.isdir("./%s" % ip['path']):
@@ -511,6 +519,15 @@ class IPDatabase(object):
                     continue
 
                 print(tcolors.OK + "\nUpdating ip '%s'..." % ip['name'] + tcolors.ENDC)
+
+                # make sure the current remote name matches the specified one
+                current_remote = execute_out("%s remote get-url %s" % (git, origin)).rstrip().decode('UTF-8')
+                if current_remote != "%s/%s.git" % (ip['remote'], ip['name']):
+                    ret = execute("%s remote set-url %s %s/%s.git" % (git, origin, ip['remote'], ip['name']))
+                    if ret != 0:
+                        print(tcolors.ERROR + "ERROR: could not update remote for ip '%s'." % (ip['name']) + tcolors.ENDC)
+                        errors.append("%s - Could not update remote" % (ip['name']));
+                        continue
 
                 # fetch everything first so that all commits are available later
                 ret = execute("%s fetch" % (git))
@@ -551,15 +568,6 @@ class IPDatabase(object):
                 os.chdir("./")
 
                 print(tcolors.OK + "\nCloning ip '%s'..." % ip['name'] + tcolors.ENDC)
-
-
-                # compose remote name
-                server = ip['server'] if ip['server'] is not None else self.default_server
-                group  = ip['group']  if ip['group']  is not None else self.default_group
-                if server[:5] == "https" or server[:6] == "git://":
-                    ip['remote'] = "%s/%s" % (server, group)
-                else:
-                    ip['remote'] = "%s:%s" % (server, group)
 
                 ret = execute("%s clone %s/%s.git %s" % (git, ip['remote'], ip['name'], ip['path']))
                 if ret != 0:
